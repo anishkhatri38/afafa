@@ -7,6 +7,8 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings 
 from django.conf.urls.static import static
 
+# app_name="Astra"
+
 urlpatterns = [   
     # Added 
     # path('', views.index, name = 'index'),
@@ -15,6 +17,8 @@ urlpatterns = [
     path('create-project/', views.createProject, name = 'create-project'),
     path('update-project/<str:pk>/', views.updateProject, name = 'update-project'),
     path('delete-project/<str:pk>/', views.deleteProject, name = 'delete-project'),
+
+    
 
 
 
@@ -25,7 +29,7 @@ urlpatterns = [
     path('', views.index, name = 'index'),
     path('communicate/', views.communicate, name = 'communicate'),
     path('room/<str:pk>/', views.room, name = 'room'),
-    path('profile/<str:pk>/', views.customerProfile, name ='customer-profile'),
+    path('customer-profile/<str:pk>/', views.customerProfile, name ='customer-profile'),
     # path ('profile/<str:pk>/', views.userProfile, name = "user-profile"),
     
     path('create-room/', views.createRoom, name = "create-room"),
@@ -34,8 +38,8 @@ urlpatterns = [
     path('delete-message/<str:pk>/', views.deleteMessage, name = "delete-message"),
 
     path('update-user', views.updateUser, name = "update-user"),
-    path('login-customer/', views.loginCustomer, name = 'login-customer'),
-    path('register-customer/', views.registerCustomer, name = 'register-customer'),
+    # path('login/', views.loginCustomer, name = 'login'),
+    # path('register-customer/', views.registerCustomer, name = 'register-customer'),
     ## for flexible device design 
     path('topics/', views.topicsPage, name = 'topics'),
     path('activity/', views.activityPage, name = 'activity'),
@@ -43,6 +47,7 @@ urlpatterns = [
 
     ## this is for footer 
     path('about/', views.AboutUs, name = 'about'),
+    path('video/', views.joinVideo, name = 'video'),
     
     # for membership of the program 
     path('membership/', views.userMembership, name = 'membership'),
@@ -58,7 +63,10 @@ urlpatterns = [
     path ('home_contact/', views.home_contact, name = 'home_contact'),
 
     path ('contact/', views.contact, name = 'contact'),
+    
 
+    # for viewing the blog 
+    path ('single/<slug:slug>', views.single, name="singel"),
 ]
 
 

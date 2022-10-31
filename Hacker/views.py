@@ -13,6 +13,7 @@ from django.urls import reverse
 from .models import Message, Room
 from .forms import RoomForm, ProjectForm, ReviewForm, UserForm
 from .models import Topic 
+from .models import Blog
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -20,7 +21,7 @@ from .models import Project, Tag
 from django.contrib import admin
 from .utils import searchProjects,paginateProjects
 from django.db.models import Q
-from users.decorators import unauthenticated_user,allowed_users,admin_only
+from .decorators import unauthenticated_user,allowed_users,admin_only
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout, authenticate, login
 
@@ -33,8 +34,13 @@ from users.forms import CustomUserCreationForm, ProfileForm, SkillForm, InboxMes
 
 
 def index(request):
-    print(request.user)
-    return render(request, 'index.html')
+    data = Blog.objects.all()
+    return render(request, 'index.html',{"blogs":data})
+
+def single(request,slug):
+    data = Blog.objects.get(slug=slug)
+    return render(request, 'single.html',{"blog":data})
+    
 
 
 
@@ -82,14 +88,12 @@ def room(request, pk):
 
 
 
-
 def customerProfile(request,pk):
-    user = User.objects.get(id = pk)
-    rooms = user.room_set.all()
-    room_messages = user.message_set.all()
-    topics = Topic.objects.all()
-    context = {'user':user, 'rooms':rooms, 'room_messages': room_messages,'topics':topics}
-    return render (request, 'customer_profile.html', context)
+    profile = Profile.objects.get(id = pk)
+    topSkills = profile.skill_set.exclude(description__exact = "")
+    otherSkills = profile.skill_set.filter(description = "")
+    context = {'profile': profile, 'topSkills':topSkills, 'otherSkills':otherSkills}
+    return render (request, 'users/user-profile.html', context )
 
 
 
@@ -182,7 +186,7 @@ def projects(request):
 
 
 
-@login_required(login_url='login')
+
 def project(request,pk):
     projectObj = Project.objects.get(id=pk)
     form = ReviewForm()
@@ -208,6 +212,7 @@ def project(request,pk):
 
     
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin','trainer'])
 def createProject(request):
     profile = request.user.profile
     form = ProjectForm()
@@ -231,6 +236,7 @@ def createProject(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin','trainer'])
 def updateProject(request,pk):
     profile = request.user.profile
     project = profile.project_set.get(id=pk)
@@ -253,6 +259,7 @@ def updateProject(request,pk):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin','trainer'])
 def deleteProject(request,pk):
     profile = request.user.profile
     project = profile.project_set.get (id = pk)
@@ -284,76 +291,60 @@ def updateUser(request):
 
 
 
-# def userProfile(request,pk):
-#     profile = Profile.objects.get(id = pk)
-#     topSkills = profile.skill_set.exclude(description__exact = "")
-#     otherSkills = profile.skill_set.filter(description = "")
-#     context = {'profile': profile, 'topSkills':topSkills, 'otherSkills':otherSkills}
-#     return render (request, 'users/user-profile.html', context )
+# def loginCustomer(request):
+#     group = None
+#     page = 'login'
 
-
-
-def loginCustomer(request):
-    group = None
-    page = 'login'
-
-    if request.method == 'POST':
-            useraccountname = request.POST['username']
-            password = request.POST['password']
+#     if request.method == 'POST':
+#             useraccountname = request.POST['username']
+#             password = request.POST['password']
         
-            try: 
-              user = User.objects.get(username=useraccountname)
+#             try: 
+#               user = User.objects.get(username=useraccountname)
 
-            except:
+#             except:
                 
-               messages.error(request, 'User does not exist')
+#                messages.error(request, 'User does not exist')
             
-            user = authenticate(request, username=useraccountname, password=password)
+#             user = authenticate(request, username=useraccountname, password=password)
 
-            if user is not None:
-                login(request, user)
-                return redirect(request.GET['next'] if 'next' in request.GET else 'project-customer')
+#             if user is not None:
+#                 login(request, user)
+#                 return redirect(request, 'project-customer')
+#                 # GET['next'] if 'next' in request.GET else
             
-            if request.user.groups.exists():
-                group = request.user.groups.all()[0].name
+#             if request.user.groups.exists():
+#                 group = request.user.groups.all()[0].name
 
-            if group == 'active':
-                return redirect('Products/products_home.html')
-
-            if group == 'trainer':
-                return redirect('staff')
-
-            if group == 'superuser':
-                return redirect('projects')
-            else:
-                messages.error(request, 'username or password is incorrect!! ')
-    return render(request, 'login_customer.html')
+#             else:
+#                 messages.error(request, 'username or password is incorrect!! ')
+#     return render(request, 'login_customer.html')
 
 
 
-def registerCustomer(request):
-    page = 'register'
-    form = CustomUserCreationForm()
+# def registerCustomer(request):
+#     page = 'register'
+#     form = CustomUserCreationForm()
 
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.username = user.username.lower()
+#             user.save()
 
-            group = Group.objects.get(name='Trainer')
-            user.groups.add(group)
+#             group = Group.objects.get(name='trainer')
+#             user.groups.add(group)
 
-            messages.success(request, 'User account is created! thank you ')
+#             messages.success(request, 'User account is created! thank you ')
 
-            login(request,user)
-            return redirect('communicate')
+#             login(request,user)
+#             return redirect('communicate')
 
-        else:
-            messages.success(request,'An error has occured during registration.')
-    context = {'page': page, 'form':form }
-    return render (request, 'login_customer.html', context )
+#         else:
+#             messages.success(request,'An error has occured during registration.')
+#     context = {'page': page, 'form':form }
+#     return render (request, 'login_customer.html', context )
 
 
 
@@ -391,10 +382,16 @@ def AboutUs(request):
 def userMembership(request):
     context = {}
     return render(request, 'membership.html', context)
+
 @login_required(login_url='login')
 def userCheckout(request):
     context = {}
     return render(request, 'checkout.html', context)
+
+@login_required(login_url='login')
+def joinVideo(request):
+    context = {}
+    return render(request,'agora.html', context)
 
 
 
@@ -473,3 +470,5 @@ def contact(request):
         messages.success(request, 'Your message has been sent!.')
         return redirect('home_contact')
     return render (request,'contact.html' )
+
+
