@@ -26,11 +26,12 @@ def product_checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer = customer, complete = False)
         items = order.orderitem_set.all()
+        cartItems = order['get_cart_items']
     else:
         items = []
         order = {'get_cart_total':0, 'get_cart_items':0}
-
-    context = {'items':items,'order':order}
+        cartItems = order.get_cart_items
+    context = {'items':items,'order':order,'cartItems':cartItems}
     return render(request,'Products/product_checkout.html',context)
 
 
@@ -46,28 +47,28 @@ def product_cart(request):
     context = {'items':items,'order':order}
     return render(request,'Products/product_cart.html',context)
 
+
 def updateItem(request):
-    data = json.loads(request.data)
-    action = data['action']
-    productId = data['productId']
+	data = json.loads(request.body)
+	productId = data['productId']
+	action = data['action']
+	print('Action:', action)
+	print('Product:', productId)
 
-    print('Action:',action)
-    print('productId:',productId)
+	customer = request.user.customer
+	product = Product.objects.get(id=productId)
+	order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
-    customer = request.user.customer
-    product = Product.objects.get(id=productId)
-    order, created = Order.objects.get_or_create(customer = customer, complete = False)
-    
-    orderItem, created = OrderItem.objects.get_or_created(prder=order, product=product)
+	orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
 
-    if action == 'add':
-        orderItem.quantity = (orderItem.quantity +1)
-    elif action == 'remove':
-         orderItem.quantity = (orderItem.quantity -1)
+	if action == 'add':
+		orderItem.quantity = (orderItem.quantity + 1)
+	elif action == 'remove':
+		orderItem.quantity = (orderItem.quantity - 1)
 
-    orderItem.save()
+	orderItem.save()
 
-    if orderItem.quantity <=0:
-        orderItem.delete()
-        
-    return JsonResponse('Items was added', safe = False )
+	if orderItem.quantity <= 0:
+		orderItem.delete()
+
+	return JsonResponse('Item was added', safe=False)
