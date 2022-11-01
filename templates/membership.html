@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="{% static 'styles/membership.css' %}" />
   
 
-  <title>Trainer's Room - Squeeze your muscles!</title>
+  <title>HWCC - We are warriors!</title>
   
 </head>
 
@@ -25,7 +25,7 @@
 <header class="header">
     <div class="container container--narrow">
       <a href="/" class="header__logo">
-        <img src="{% static 'img/logo.svg' %}" alt="Trainer's Room LOGO " />
+        <img src= "{% static 'img/hwcc.svg' %}" alt="HWCC LOGO " />
       </a>
       <nav class="header__nav">
         <input type="checkbox" id="responsive-menu" />
@@ -36,10 +36,10 @@
         <ul class="header__menu">
           
           
-          <li class="header__menuItem"><a href="{% url 'profiles' %}">Trainers</a></li>
-           <li class="header__menuItem"><a href="{% url 'product_home' %}">Products</a></li> 
+          <li class="header__menuItem"><a href="{% url 'profiles' %}">Community</a></li>
+           <li class="header__menuItem"><a href="{% url 'product_home' %}">Brand</a></li> 
           
-          <li class="header__menuItem"><a href="{% url 'projects' %}">Programs</a></li>
+          <li class="header__menuItem"><a href="{% url 'projects' %}">Players</a></li>
           <li class="header__menuItem"><a href="{% url 'communicate' %}">Groups</a></li>
           
           
@@ -63,39 +63,27 @@
 <body>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-  <h1 class="display-4">Trainer's Room Premium </h1>
-  <p class="lead">Get the body you've alwasy dreamed of. Live the healthly life that you know you should. From workouts to nutrition, you have all the tools you need to succeed. It's all yours with Trainer's Room  Premium.</p>
+  <h1 class="display-4">HWCC Yearly Membership</h1>
+  <p class="lead">Join the amazin criket club and family Himalayan Warriors Cricket Club. Say yes to brotherhood.</p>
 </div>
 
 <div class="container">
   <div class="card-deck mb-3 text-center">
     <div class="card mb-4 shadow-sm">
       <div class="card-header">
-        <h4 class="my-0 font-weight-normal">Weekly</h4>
+        <h4 class="my-0 font-weight-normal">Yearly</h4>
       </div>
       <div class="card-body">
-        <h1 class="card-title pricing-card-title">$10 <small class="text-muted">/ mo</small></h1>
+        <h1 class="card-title pricing-card-title">$100<small class="text-muted">/ year</small></h1>
         <ul class="list-unstyled mt-3 mb-4">
-          <li>Starting from </li>
-          <li>$10</li>
-          <li>Weekly</li>
+          <li>Playing Jersey Set</li>
+          <li>Club Services</li>
+          <li>Yearly</li>
           
         </ul>
         {% comment %} {% url 'checkout' %} {% endcomment %}
         
-        <a href="https://buy.stripe.com/14k3eTfk0avK5hK005"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Get started</button></a>
-      </div>
-    </div>
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">Yearly<small class="text-primary">(Popular)</small></h4>
-      </div>
-      <div class="card-body">
-        <h1 class="card-title pricing-card-title">$400 <small class="text-muted">/ yr</small></h1>
-        <ul class="list-unstyled mt-3 mb-4">
-          <li>Detailed Workout Plans</li>
-          <li>$400/year</li>
-          <li>Save 20%</li>
+        
           
         </ul>
         <a href="https://buy.stripe.com/14k9Dh8VC7jy7pScMQ"><button type="button" class="btn btn-lg btn-block btn-primary">Get started</button></a>

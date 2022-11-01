@@ -39,10 +39,10 @@ def admin_only(allowed_roles=[]):
             if request.user.groups.exists():
                 group = request.user.groups.all()[0].name
 
-            if group == 'customer':
+            if group == 'Member':
                 return redirect('communicate')
 
-            if group == 'trainer':
+            if group == 'Player':
                 return redirect('room')
 
             if group == 'superuser':

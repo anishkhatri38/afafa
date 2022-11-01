@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <title>Trainer's Room - Stop wishing, start doing!</title>
-    <link rel = "icon" href = "{% static 'img/logo.svg' %}"type = "image/x-icon">
+    <link rel = "icon" href = "{% static 'img/hwcc.svg' %}"type = "image/x-icon">
   </head>
   <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -40,7 +40,7 @@
             Login
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{% url 'login' %}">Customer/Trainer</a>
+            <a class="dropdown-item" href="{% url 'login' %}">HWCC Players Login</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/admin/">Admin</a> 
           </div>
@@ -60,9 +60,9 @@
             Signup/Register
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{% url 'register-customer' %}">Customer</a>
+            <a class="dropdown-item" href="{% url 'register-customer' %}">Member</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'register-trainer' %}">Trainer</a>
+            <a class="dropdown-item" href="{% url 'register-trainer' %}">HWCC Player</a>
           </div>
         </li>
       </ul>

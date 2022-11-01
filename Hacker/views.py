@@ -46,7 +46,8 @@ def single(request,slug):
 
     
 # Messaging communication in our website 
-@login_required(login_url='login')
+# @login_required(login_url='login')
+@login_required(login_url = 'login')
 def communicate(request):
     #Query for room database 
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -66,7 +67,7 @@ def communicate(request):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 #Primary key added to distinguish between the rooms. 
 def room(request, pk):
     room = Room.objects.get(id=pk)
@@ -188,6 +189,24 @@ def projects(request):
 
 
 def project(request,pk):
+    projectObj = Project.objects.get(id=pk)
+    form = ReviewForm()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        review = form.save(commit = False)
+        review.project = projectObj
+        review.owner = request.user.profile
+        review.save()
+
+        projectObj.getVoteCount
+
+        # update  project vote count 
+        messages.success(request, 'Your review was sucessfully submitted')
+        return redirect('project' ,pk = projectObj.id)
+    return render (request, 'single.project.html', {'project': projectObj,'form':form})
+
+def Vlog(request,pk):
     projectObj = Project.objects.get(id=pk)
     form = ReviewForm()
 

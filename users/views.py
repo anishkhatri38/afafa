@@ -67,7 +67,7 @@ def registerCustomer(request):
             user.save()
             
 
-            group = Group.objects.get(name='customer')
+            group = Group.objects.get(name='Member')
             user.groups.add(group)
 
             messages.success(request, 'User account is created! Please sign In! ')
@@ -76,7 +76,7 @@ def registerCustomer(request):
             return redirect('login')
 
         else:
-            messages.success(request,'An error has occured during registration.')
+            messages.success(request,'Please try password as combination of letters and numbers, and not relavent to your name and email.')
     context = {'page': page, 'form':form }
     return render (request, 'users/register_customer.html', context )
         
@@ -92,7 +92,7 @@ def registerTrainer(request):
             user.save()
             
 
-            group = Group.objects.get(name='trainer')
+            group = Group.objects.get(name='Player')
             user.groups.add(group)
 
             messages.success(request, 'User account is created! Please sign In! ')
@@ -101,7 +101,7 @@ def registerTrainer(request):
             return redirect('login')
 
         else:
-            messages.success(request,'An error has occured during registration.')
+            messages.success(request,'Please try password as combination of letters and numbers, and not relavent to your name and email')
 
 
 
